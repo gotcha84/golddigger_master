@@ -130,14 +130,9 @@ int main(int argc, char** argv) {
     image_transport::ImageTransport it (n);
     sub = it.subscribe("/camera/visible/image", 1, imageCallback);
     pub = it.advertise("/output_video", 1);
-
-    ros::Rate loopRate(10);
     
-    while (ros::ok()) {
-
-        ros::spinOnce();
-        loopRate.sleep();
-        
+    if (ros::ok()) {
+        ros::spin();
     }
     
     return 0;
