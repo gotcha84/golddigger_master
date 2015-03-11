@@ -1,6 +1,6 @@
 <launch>
 
-	<node name="detect_coins" pkg="golddigger_master" type="detect_coins" />
+	<node name="detect_coins" pkg="golddigger_master" type="detect_coins" output="screen" />
 
 	<node name="raw_image" pkg="rqt_image_view" type="rqt_image_view">
 		<remap from="image" to="/output_video" />

@@ -6,6 +6,7 @@
 #include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
+#include "std_msgs/Int64.h"
 
 #include <string>
 #include <iostream> 
@@ -16,6 +17,8 @@
 using namespace cv;
 using namespace std;
 
+
+ros::Publisher lightPub;
 
 class CoinDetector {
 
@@ -28,7 +31,7 @@ class CoinDetector {
 
         CoinDetector() {
             if (!faceCascade.load(faceCascadeName)) {
-                ROS_ERROR("ERROR: Could not load face classifier cascade");
+                ROS_ERROR("ERROR: Could not load classifier cascade");
             }
         }
 
@@ -63,7 +66,8 @@ class CoinDetector {
                 ,
                 Size(30, 30) );
             t = (double)cvGetTickCount() - t;
-            printf( "detection time = %g ms\n", t/((double)cvGetTickFrequency()*1000.) );
+            // printf( "detection time = %g ms\n", t/((double)cvGetTickFrequency()*1000.) );
+            
             for( vector<Rect>::const_iterator r = faces.begin(); r != faces.end(); r++, i++ )
             {
                 Mat smallImgROI;
@@ -86,6 +90,15 @@ class CoinDetector {
                                color, 3, 8, 0);
                 }
             }
+
+            std_msgs::Int64 msg;
+            if (faces.begin() != faces.end()) {
+                msg.data = 1;
+            }
+            else {
+                msg.data = 0;
+            }
+            lightPub.publish(msg);
         }
 
 };
@@ -100,8 +113,6 @@ image_transport::Publisher pub;
 CoinDetector coinDetector;
 
 void imageCallback(const sensor_msgs::ImageConstPtr& msg) {
-
-    cout << "image callback!" << endl;
 
     cv_bridge::CvImagePtr cv_ptr;
     try {
@@ -125,8 +136,10 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg) {
 int main(int argc, char** argv) {
 
     ros::init(argc, argv, "detect_coins");
-    ros::NodeHandle n;
     
+    ros::NodeHandle n;
+    lightPub = n.advertise<std_msgs::Int64>("light", 1);
+
     image_transport::ImageTransport it (n);
     sub = it.subscribe("/camera/visible/image", 1, imageCallback);
     pub = it.advertise("/output_video", 1);
