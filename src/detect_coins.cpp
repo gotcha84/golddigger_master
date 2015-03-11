@@ -24,13 +24,8 @@ class CoinDetector {
 
     public:
 
-        //string faceCascadeName = "/home/viki/catkin_ws/src/golddigger_master/src/coin.xml";
-        CascadeClassifier faceCascade;
-
-        static const float scale = 2.0;
-
         CoinDetector() {
-            namedWindow( "Hough Circle Transform Demo", CV_WINDOW_AUTOSIZE );
+
         }
 
         ~CoinDetector() {
@@ -75,8 +70,6 @@ class CoinDetector {
 };
 
 
-// ---------- end class definition
-
 
 image_transport::Subscriber sub;
 image_transport::Publisher pub;
@@ -94,13 +87,8 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg) {
       return;
     }
 
-    // do face detect stuff
     coinDetector.detectAndDraw(cv_ptr->image);
 
-    // cv_bridge::CvImage out_msg;
-    // //out_msg.header   = in_msg->header; // Same timestamp and tf frame as input image
-    // out_msg.encoding = sensor_msgs::image_encodings::BGR8; // Or whatever
-    // out_msg.image = cv_ptr->image; // Your cv::Mat
     pub.publish(cv_ptr->toImageMsg());
 }
 
