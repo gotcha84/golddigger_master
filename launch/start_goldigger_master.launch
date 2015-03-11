@@ -1,9 +1,11 @@
 <launch>
 
-	<node name = "raw_image" pkg = "rqt_image_view" type = "rqt_image_view">
-		<remap from = "image" to = "/output_video" />
-		<param name = "autosize" value="true" />
-		<param name = "window_name" value="Output" />
+	<node name="detect_coins" pkg="golddigger_master" type="detect_coins" />
+
+	<node name="raw_image" pkg="rqt_image_view" type="rqt_image_view">
+		<remap from="image" to="/output_video" />
+		<param name="autosize" value="true" />
+		<param name="window_name" value="Output" />
 	</node>
 
 </launch>

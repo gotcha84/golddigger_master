@@ -83,7 +83,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
+ INCLUDE_DIRS include
 #  LIBRARIES golddigger_master
 #  CATKIN_DEPENDS roscpp rospy std_msgs
 #  DEPENDS system_lib
@@ -106,16 +106,14 @@ include_directories(
 # )
 
 ## Declare a cpp executable
-# add_executable(golddigger_master_node src/golddigger_master_node.cpp)
+add_executable(detect_coins src/detect_coins.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
-# add_dependencies(golddigger_master_node golddigger_master_generate_messages_cpp)
+add_dependencies(detect_coins golddigger_master_gencpp)
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(golddigger_master_node
-#   ${catkin_LIBRARIES}
-# )
+target_link_libraries(detect_coins ${OpenCV_LIBS} ${catkin_LIBRARIES})
 
 #############
 ## Install ##
