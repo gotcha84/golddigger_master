@@ -55,8 +55,6 @@ class CoinDetector {
                 circle( img, center, radius, Scalar(0,0,255), 3, 8, 0 );
             }
 
-            cout << "# circles: " << circles.size() << endl;
-
             std_msgs::Int64 msg;
             if (circles.size() > 0) {
                 msg.data = 1;
