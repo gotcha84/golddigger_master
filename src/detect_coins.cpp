@@ -57,7 +57,7 @@ class CoinDetector {
 
             std_msgs::Int64 msg;
             if (circles.size() > 0) {
-                msg.data = 1;
+                msg.data = 2;
             }
             else {
                 msg.data = 0;
