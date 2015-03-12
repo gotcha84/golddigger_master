@@ -36,6 +36,7 @@ class CoinDetector {
         {
             Mat gray;
             vector<Vec3f> circles;
+            int numCircles = 0;
 
             cvtColor( img, gray, CV_BGR2GRAY );
 
@@ -48,15 +49,41 @@ class CoinDetector {
             /// Draw the circles detected
             for( size_t i = 0; i < circles.size(); i++)
             {
-                Point center(cvRound(circles[i][0]), cvRound(circles[i][1]));
-                int radius = cvRound(circles[i][2]);
+                /* If color is within coin range, draw circle
+                 * 
+                 * Typical copper RGB = (153, 117, 89)
+                 * Typical silver RGB = (174, 176, 180)
+                 *
+                 * Unfortunately these values depend heavily on the lighting.
+                 * A silver coin can look practically white with light reflecting
+                 * off of it. A copper coin can look very dark with minimal light.
+                 */
+                Vec3b colorAtPoint = img.at<Vec3b>(Point(circles[i][0], circles[i][1]));
 
-                // circle outline
-                circle( img, center, radius, Scalar(0,0,255), 3, 8, 0 );
+                if (((colorAtPoint.val[0] > 200) && (colorAtPoint.val[2] < 150)) ||
+                    ((colorAtPoint.val[1] > 200) && (colorAtPoint.val[2] < 150)) ||
+                    ((colorAtPoint.val[2] > 200) && (colorAtPoint.val[1] < 100)) ||
+                    ((colorAtPoint.val[0] < 50) && (colorAtPoint.val[1] < 50) && (colorAtPoint.val[2] < 50))) {
+                    // If (B > 200) && (R < 150) we have a blue-ish object. Not a coin.
+                    // If (G > 200) && (R < 150) we have a green-ish object. Not a coin.
+                    // If (R > 200) && (G < 100) we have a red-ish object. Not a coin.
+                    // If (B < 50) && (G < 50) && (R < 50) we have a black object. Not a coin.
+                    continue;
+                }
+                else {
+                    
+                    numCircles++;
+
+                    Point center(cvRound(circles[i][0]), cvRound(circles[i][1]));
+                    int radius = cvRound(circles[i][2]);
+
+                    // circle outline
+                    circle( img, center, radius, Scalar(0,0,255), 3, 8, 0 );
+                }
             }
 
             std_msgs::Int64 msg;
-            if (circles.size() > 0) {
+            if (numCircles > 0) {
                 msg.data = 1;
             }
             else {
