@@ -62,13 +62,9 @@ class CoinDetector {
                 Vec3b colorAtPoint = img.at<Vec3b>(Point(circles[i][0], circles[i][1]));
 
                 if (((colorAtPoint.val[0] > 150) && (colorAtPoint.val[1] < 150) && (colorAtPoint.val[2] < 150)) ||
-                    //((colorAtPoint.val[0] < 100) && (colorAtPoint.val[1] > 100) && (colorAtPoint.val[2] < 100)) ||
-                    //((colorAtPoint.val[0] < 100) && (colorAtPoint.val[1] < 100) && (colorAtPoint.val[2] > 175)) ||
                     ((colorAtPoint.val[0] < 100) && (colorAtPoint.val[1] < 100) && (colorAtPoint.val[2] < 150))) {
-                    // If (B > 200) && (R < 150) we have a blue-ish object. Not a coin.
-                    // If (G > 200) && (R < 150) we have a green-ish object. Not a coin.
-                    // If (R > 200) && (G < 100) we have a red-ish object. Not a coin.
-                    // If (B < 50) && (G < 50) && (R < 50) we have a black object. Not a coin.
+                    // If (R > 150) && (G < 150) && (B < 150) we have a red object. Not a coin.
+                    // If (R < 100) && (G < 100) && (B < 150) we have a blue/black object. Not a coin.
                     continue;
                 }
                 else {
