@@ -53,17 +53,18 @@ class CoinDetector {
                  * 
                  * Typical copper RGB = (153, 117, 89)
                  * Typical silver RGB = (174, 176, 180)
-                 *
+                 * Red = ~175 75 75
+                 * Blue = ~50 50 125
                  * Unfortunately these values depend heavily on the lighting.
                  * A silver coin can look practically white with light reflecting
                  * off of it. A copper coin can look very dark with minimal light.
                  */
                 Vec3b colorAtPoint = img.at<Vec3b>(Point(circles[i][0], circles[i][1]));
 
-                if (((colorAtPoint.val[0] > 200) && (colorAtPoint.val[2] < 150)) ||
-                    ((colorAtPoint.val[1] > 200) && (colorAtPoint.val[2] < 150)) ||
-                    ((colorAtPoint.val[2] > 200) && (colorAtPoint.val[1] < 100)) ||
-                    ((colorAtPoint.val[0] < 50) && (colorAtPoint.val[1] < 50) && (colorAtPoint.val[2] < 50))) {
+                if (((colorAtPoint.val[0] > 150) && (colorAtPoint.val[1] < 150) && (colorAtPoint.val[2] < 150)) ||
+                    //((colorAtPoint.val[0] < 100) && (colorAtPoint.val[1] > 100) && (colorAtPoint.val[2] < 100)) ||
+                    //((colorAtPoint.val[0] < 100) && (colorAtPoint.val[1] < 100) && (colorAtPoint.val[2] > 175)) ||
+                    ((colorAtPoint.val[0] < 100) && (colorAtPoint.val[1] < 100) && (colorAtPoint.val[2] < 150))) {
                     // If (B > 200) && (R < 150) we have a blue-ish object. Not a coin.
                     // If (G > 200) && (R < 150) we have a green-ish object. Not a coin.
                     // If (R > 200) && (G < 100) we have a red-ish object. Not a coin.
